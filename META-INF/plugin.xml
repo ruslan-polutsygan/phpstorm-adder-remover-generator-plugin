@@ -1,0 +1,36 @@
+<idea-plugin version="2">
+    <id>com.ruslanpolutsygan.adderremover</id>
+    <name>Adders/Removers Generator</name>
+    <version>0.0.1</version>
+    <vendor email="ruslan.polutsygan@gmail.com">Ruslan Polutsygan</vendor>
+
+    <description>Generates adders/removed for class properties</description>
+
+    <change-notes>First version. Everything is new.</change-notes>
+
+    <idea-version since-build="131"/>
+
+    <!-- please see https://confluence.jetbrains.com/display/IDEADEV/Plugin+Compatibility+with+IntelliJ+Platform+Products
+         on how to target different products -->
+    <!-- uncomment to enable plugin in all products
+    <depends>com.intellij.modules.lang</depends>
+    -->
+    <depends>com.jetbrains.php</depends>
+    <depends>com.intellij.modules.platform</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <!-- Add your extensions here -->
+    </extensions>
+
+    <application-components>
+        <!-- Add your application components here -->
+    </application-components>
+
+    <project-components>
+        <!-- Add your project components here -->
+    </project-components>
+
+    <actions>
+    </actions>
+
+</idea-plugin>
