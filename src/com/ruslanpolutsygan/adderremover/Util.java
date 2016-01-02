@@ -14,6 +14,12 @@ public class Util {
         );
     }
 
+    public static String createRemoverName(String fieldName) {
+        return "remove" + StringUtil.capitalize(
+                Util.pluralToSingular(fieldName).replace("_", "")
+        );
+    }
+
     private static String pluralToSingular(String plural) {
         if(plural.endsWith("ies")) {
             return plural.substring(0, plural.length() - 3) + 'y';

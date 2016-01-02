@@ -29,11 +29,7 @@ public class ActionHandler extends PhpGenerateFieldAccessorHandlerBase {
 
     @Override
     protected boolean isSelectable(PhpClass phpClass, Field field) {
-        return !this.hasAdder(field) && this.hasArrayLikeAnnotation(field);
-    }
-
-    private boolean hasAdder(Field field) {
-        return this.checker.hasMethod(field);
+        return !this.checker.hasMethod(field) && this.hasArrayLikeAnnotation(field);
     }
 
     private boolean hasArrayLikeAnnotation(Field field) {

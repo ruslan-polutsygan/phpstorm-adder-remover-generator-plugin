@@ -31,9 +31,11 @@
     </project-components>
 
     <actions>
-        <action id="adder" class="com.ruslanpolutsygan.adderremover.actions.PhpGenerateAddersAction" text="Generate adders">
+        <action id="adder" class="com.ruslanpolutsygan.adderremover.actions.PhpGenerateAddersAction" text="Generate Adders">
+            <add-to-group group-id="GenerateGroup" anchor="last" />
+        </action>
+        <action id="remover" class="com.ruslanpolutsygan.adderremover.actions.PhpGenerateRemoversAction" text="Generate Removers">
             <add-to-group group-id="GenerateGroup" anchor="last" />
         </action>
     </actions>
-
 </idea-plugin>
