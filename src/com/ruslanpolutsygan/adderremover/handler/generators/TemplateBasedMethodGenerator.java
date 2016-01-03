@@ -69,4 +69,20 @@ public abstract class TemplateBasedMethodGenerator extends MethodGenerator {
 
         return "$var";
     }
+
+    protected boolean isDoctrineCollectionField(Field field) {
+        PhpDocComment phpDoc = field.getDocComment();
+        if(phpDoc == null) {
+            return false;
+        }
+
+        PhpDocParamTag varTag = phpDoc.getVarTag();
+        if(varTag == null) {
+            return false;
+        }
+
+        TreeSet<String> types = (TreeSet<String>) varTag.getType().getTypes();
+
+        return types.contains("\\Doctrine\\Common\\Collections\\Collection");
+    }
 }

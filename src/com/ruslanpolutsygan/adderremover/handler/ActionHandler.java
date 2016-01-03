@@ -44,8 +44,21 @@ public class ActionHandler extends PhpGenerateFieldAccessorHandlerBase {
         }
 
         TreeSet<String> types = (TreeSet<String>) varTag.getType().getTypes();
+        for (String type : types) {
+            if (type.endsWith("[]")) {
+                return true;
+            }
 
-        return types.contains("\\array") || types.contains("\\Doctrine\\Common\\Collections\\Collection");
+            if(type.equals("\\array")) {
+                return true;
+            }
+
+            if(type.equals("\\Doctrine\\Common\\Collections\\Collection")) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     @Override
