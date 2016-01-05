@@ -3,16 +3,16 @@ package com.ruslanpolutsygan.adderremover.handler.generators;
 import com.jetbrains.php.lang.PhpCodeUtil;
 import com.jetbrains.php.lang.documentation.phpdoc.psi.PhpDocComment;
 import com.jetbrains.php.lang.documentation.phpdoc.psi.tags.PhpDocParamTag;
-import com.jetbrains.php.lang.intentions.generators.PhpAccessorMethodData;
 import com.jetbrains.php.lang.psi.PhpPsiElementFactory;
 import com.jetbrains.php.lang.psi.elements.Field;
 import com.jetbrains.php.lang.psi.elements.Method;
+import com.ruslanpolutsygan.adderremover.handler.PhpMethodData;
 
 import java.util.TreeSet;
 
 public abstract class TemplateBasedMethodGenerator extends MethodGenerator {
     @Override
-    public PhpAccessorMethodData[] generate(Field field) {
+    public PhpMethodData[] generate(Field field) {
 
         String methodTemplate = this.getMethodTemplate(field);
         String methodPhpDocTemplate = this.getPhpDocTemplate(field);
@@ -20,8 +20,8 @@ public abstract class TemplateBasedMethodGenerator extends MethodGenerator {
         Method method = PhpCodeUtil.createMethodFromTemplate(field.getProject(), false, methodTemplate);
         PhpDocComment methodPhpDoc = PhpPsiElementFactory.createFromText(field.getProject(), PhpDocComment.class, methodPhpDocTemplate);
 
-        return new PhpAccessorMethodData[] {
-                new PhpAccessorMethodData(field.getContainingClass(), methodPhpDoc, method)
+        return new PhpMethodData[] {
+                new PhpMethodData(method, methodPhpDoc)
         };
     }
 
