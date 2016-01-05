@@ -5,6 +5,9 @@ Recognized types are: `array`, `ClassName[]`, `Doctrine\Common\Collections\Colle
 
 It is possible to generate only adders, only removers or both at the same time: plugin adds three menu items to class "Generate" context menu - https://i.imgur.com/ExPnHNN.png
 
+
+*__Works in PhpStorm 9 and 10. May be working in other IDE versions, but this was not checked.__*
+
 # Examples
 
 ### Before
