@@ -12,7 +12,7 @@ It is possible to generate only adders, only removers or both at the same time: 
 
 ### Before
 
-```
+```php
 namespace App\Entity;
 
 class Entity
@@ -25,7 +25,7 @@ class Entity
 ```
 ### After
 
-```
+```php
 namespace App\Entity;
 
 class Entity
@@ -48,14 +48,16 @@ class Entity
      */
     public function removeUser($var)
     {
-        // @todo: add method body there
+        if ($key = array_search($var, $this->users, true) !== false) {
+            array_splice($this->users, $key, 1);
+        }
     }
 }
 ```
-
+---
 ### Before
 
-```
+```php
 namespace App\Entity;
 
 class Entity
@@ -69,7 +71,7 @@ class Entity
 
 ### After
 
-```
+```php
 namespace App\Entity;
 
 class Entity
@@ -92,13 +94,16 @@ class Entity
      */
     public function removeUser(User $var)
     {
-        // @todo: add method body there
+        if ($key = array_search($var, $this->users, true) !== false) {
+            array_splice($this->users, $key, 1);
+        }
     }
 }
 ```
+---
 ### Before
 
-```
+```php
 namespace App\Entity;
 
 use Doctrine\Common\Collections\Collection;
@@ -114,7 +119,7 @@ class Entity
 
 ### After
 
-```
+```php
 namespace App\Entity;
 
 use Doctrine\Common\Collections\Collection;
