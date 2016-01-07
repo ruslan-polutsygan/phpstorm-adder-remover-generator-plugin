@@ -7,7 +7,7 @@ public class AdderGenerator extends TemplateBasedMethodGenerator {
     @Override
     protected String getMethodTemplate(Field field) {
         String template = "\tpublic function __METHOD_NAME__(__ARGUMENT__)\n{\n";
-        if(this.isDoctrineCollectionField(field)) {
+        if (this.isDoctrineCollectionField(field)) {
             template += "\t\t$this->__FIELD_NAME__->add($var);\n";
         } else {
             template += "\t\t$this->__FIELD_NAME__[] = $var;\n";

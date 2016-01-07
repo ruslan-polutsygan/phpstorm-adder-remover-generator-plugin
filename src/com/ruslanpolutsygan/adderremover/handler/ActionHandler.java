@@ -63,9 +63,10 @@ public class ActionHandler extends PhpGenerateFieldAccessorHandlerBase {
 
         for(Field field : selectedFields) {
             for(PhpMethodData methodData : this.generator.generate(field)) {
-                PsiElement element = PhpCodeEditUtil.insertClassMember(phpClass, methodData.getMethod());
+                PsiElement element = PhpCodeEditUtil.insertClassMemberWithPhpDoc(
+                        phpClass, methodData.getMethod(), methodData.getPhpDoc()
+                );
                 editor.getCaretModel().moveToOffset(element.getTextOffset());
-                phpClass.addBefore(methodData.getPhpDoc(), element);
             }
         }
     }
