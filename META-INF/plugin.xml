@@ -1,12 +1,17 @@
 <idea-plugin version="2">
     <id>com.ruslanpolutsygan.adderremover</id>
     <name>Adders/Removers Generator</name>
-    <version>0.2.0</version>
+    <version>0.2.1</version>
     <vendor email="ruslan.polutsygan@gmail.com">Ruslan Polutsygan</vendor>
 
     <description>Generates adders/removers for class properties</description>
 
     <change-notes><![CDATA[
+<h2>0.2.1</h2>
+<ul>
+    <li>[improvement] default remover implementation for array property based on array_search</li>
+    <li>[bugfix] display "generate .." actions menu items only in php class context</li>
+</ul>
 <h2>0.2.0</h2>
 <ul>
     <li>Bugfix: support for PhpStorm 10</li>
