@@ -1,11 +1,6 @@
 package com.ruslanpolutsygan.adderremover;
 
-import com.jetbrains.php.lang.documentation.phpdoc.psi.PhpDocComment;
-import com.jetbrains.php.lang.documentation.phpdoc.psi.tags.PhpDocParamTag;
-import com.jetbrains.php.lang.psi.elements.Field;
 import com.intellij.openapi.util.text.StringUtil;
-
-import java.util.TreeSet;
 
 public class Util {
     public static String createAdderName(String fieldName) {
@@ -18,6 +13,10 @@ public class Util {
         return "remove" + StringUtil.capitalize(
                 Util.pluralToSingular(fieldName).replace("_", "")
         );
+    }
+
+    public static String createParamName(String fieldName) {
+        return "$" + Util.pluralToSingular(fieldName);
     }
 
     private static String pluralToSingular(String plural) {
