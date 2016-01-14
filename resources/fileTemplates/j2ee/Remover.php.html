@@ -2,11 +2,49 @@
 <body>
 <table width="100%" border="0" cellpadding="5" cellspacing="0" style="border-collapse: collapse" bordercolor="#111111">
     <tr>
-        <td colspan="3">
-            <font face="verdana" size="-1">
-                Template for Remover
-            </font>
+        <td colspan="3"><font face="verdana" size="-1">
+            Template for PHP remover methods used when "Generate Removers" action is invoked.
+        </font>
         </td>
+    </tr>
+</table>
+<table width="100%" border="0" cellpadding="5" cellspacing="0" style="border-collapse: collapse" bordercolor="#111111">
+    <tr>
+        <td colspan="3"><font face="verdana" size="-1">Predefined variables will take the following values:</font></td>
+    </tr>
+    <tr>
+        <td valign="top"><nobr><font face="verdana" size="-2"><b>${IS_DOCTRINE_COLLECTION}</b></font></nobr></td>
+        <td width="10">&nbsp;</td>
+        <td width="100%" valign="top"><font face="verdana" size="-1">If field is annotated with `Doctrine\Common\Collections\Collection` takes the value of "doctrine" or empty string otherwise.</font></td>
+    </tr>
+    <tr>
+    <tr>
+        <td valign="top"><nobr><font face="verdana" size="-2"><b>${FIELD_NAME}</b></font></nobr></td>
+        <td width="10">&nbsp;</td>
+        <td width="100%" valign="top"><font face="verdana" size="-1">The original field name as is.</font></td>
+    </tr>
+    <tr>
+        <td valign="top"><nobr><font face="verdana" size="-2"><b>${PARAM_NAME}</b></font></nobr></td>
+        <td width="10">&nbsp;</td>
+        <td width="100%" valign="top"><font face="verdana" size="-1">Singular form of field name(assuming that field name is plural). For example, `items` => `item`, `users` => `user`</font></td>
+    </tr>
+    <tr>
+        <td valign="top"><nobr><font face="verdana" size="-2"><b>${TYPE_HINT}</b></font></nobr></td>
+        <td width="10">&nbsp;</td>
+        <td width="100%" valign="top"><font face="verdana" size="-1">Type hint of param used in doc-comment, based on field name type hint.
+            For example, if field is typehinted with `App\User[]`, then ${TYPE_HINT} is `App\User`, if field is of type `array` - `mixed`. FQCN used.</font></td>
+    </tr>
+    <tr>
+        <td valign="top"><nobr><font face="verdana" size="-2"><b>${TYPE_HINTED_PARAM}</b></font></nobr></td>
+        <td width="10">&nbsp;</td>
+        <td width="100%" valign="top"><font face="verdana" size="-1">If field is array of some class instances,
+            then this `ClassName` used to type hint. Otherwise it is empty.
+            Already includes param name. Not FQCN.</font></td>
+    </tr>
+    <tr>
+        <td valign="top"><nobr><font face="verdana" size="-2"><b>${METHOD_NAME}</b></font></nobr></td>
+        <td width="10">&nbsp;</td>
+        <td width="100%" valign="top"><font face="verdana" size="-1">Name of method being generated, based on field name. For example, if field name is `user` - method name is `removeUser`(already prefixed).</font></td>
     </tr>
 </table>
 </body>
