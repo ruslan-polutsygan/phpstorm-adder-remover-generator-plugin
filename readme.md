@@ -3,7 +3,9 @@
 This plugin allows to generate adders and removers methods for class properties based on annotated type.
 Recognized types are: `array`, `ClassName[]`, `Doctrine\Common\Collections\Collection`.
 
-It is possible to generate only adders, only removers or both at the same time: plugin adds three menu items to class "Generate" context menu - https://i.imgur.com/ExPnHNN.png
+It is possible to generate only adders, only removers or both at the same time: plugin adds three menu items to class "Generate" context menu
+
+![context menu](https://i.imgur.com/ExPnHNN.png)
 
 
 *__Works in PhpStorm 9 and 10. May be working in other IDE versions, but this was not checked.__*
@@ -153,4 +155,4 @@ class Entity
 To edit templates used for generating methods go to:
 `Settings` -> `Editor` -> `File and Code Templates` -> `Other` -> `Adder/Remover`
 
-https://i.imgur.com/Ss4NOHD.png
+![edit templates](https://i.imgur.com/Ss4NOHD.png)
