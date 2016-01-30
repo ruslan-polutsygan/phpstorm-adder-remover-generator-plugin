@@ -20,7 +20,7 @@ import com.ruslanpolutsygan.adderremover.handler.generators.MethodGenerator;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.TreeSet;
+import java.util.Set;
 
 public class ActionHandler extends PhpGenerateFieldAccessorHandlerBase {
 
@@ -92,7 +92,7 @@ public class ActionHandler extends PhpGenerateFieldAccessorHandlerBase {
             return false;
         }
 
-        TreeSet<String> types = (TreeSet<String>) varTag.getType().getTypes();
+        Set<String> types = varTag.getType().getTypes();
         for (String type : types) {
             if (type.endsWith("[]")) {
                 return true;
