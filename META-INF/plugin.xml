@@ -1,12 +1,18 @@
 <idea-plugin version="2">
     <id>com.ruslanpolutsygan.adderremover</id>
     <name>Adders/Removers Generator</name>
-    <version>0.3.1</version>
+    <version>0.3.2</version>
     <vendor email="ruslan.polutsygan@gmail.com">Ruslan Polutsygan</vendor>
 
     <description>Generates adders/removers for class properties</description>
 
     <change-notes><![CDATA[
+<h2>0.3.2</h2>
+<ul>
+    <li>[enhancement] ${TYPE_HINT_FQCN} template variable introduced. ${TYPE_HINT} is not fully qualified any more - <a href="https://github.com/ruslan-polutsygan/phpstorm-adder-remover-generator-plugin/issues/3">Issue #3</a></li>
+    <li>[enhancement] ${THIS_CLASS_NAME} template variable introduced - <a href="https://github.com/ruslan-polutsygan/phpstorm-adder-remover-generator-plugin/issues/2">Issue #2</a></li>
+    <li>[bugfix] ClassCastException in PhpStorm 2016 - <a href="https://github.com/ruslan-polutsygan/phpstorm-adder-remover-generator-plugin/issues/4">Issue #4</a></li>
+</ul>
 <h2>0.3.1</h2>
 <ul>
     <li>[bugfix] EmptySet to TreeSet cast exception fixed - <a href="https://github.com/ruslan-polutsygan/phpstorm-adder-remover-generator-plugin/issues/1">Bug #1</a></li>
