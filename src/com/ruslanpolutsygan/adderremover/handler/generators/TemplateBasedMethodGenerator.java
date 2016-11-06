@@ -13,9 +13,7 @@ import com.ruslanpolutsygan.adderremover.Util;
 import com.ruslanpolutsygan.adderremover.handler.PhpMethodData;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Properties;
-import java.util.TreeSet;
+import java.util.*;
 
 public abstract class TemplateBasedMethodGenerator extends MethodGenerator {
     protected abstract String getMethodName(Field field);
@@ -77,10 +75,10 @@ public abstract class TemplateBasedMethodGenerator extends MethodGenerator {
             return "mixed";
         }
 
-        TreeSet<String> types = (TreeSet<String>) varTag.getType().getTypes();
+        Set<String> types = varTag.getType().getTypes();
         for (String type : types) {
             if (type.endsWith("[]")) {
-                return /*StringUtil.escapeBackSlashes*/(type.substring(0, type.length() - 2));
+                return (type.substring(0, type.length() - 2));
             }
         }
 
@@ -99,7 +97,7 @@ public abstract class TemplateBasedMethodGenerator extends MethodGenerator {
             return paramName;
         }
 
-        TreeSet<String> types = (TreeSet<String>) varTag.getType().getTypes();
+        Set<String> types = varTag.getType().getTypes();
         for (String type : types) {
             if (type.endsWith("[]")) {
                 return type.substring(type.lastIndexOf('\\') + 1, type.length() - 2) + " " + paramName;
@@ -120,7 +118,7 @@ public abstract class TemplateBasedMethodGenerator extends MethodGenerator {
             return false;
         }
 
-        TreeSet<String> types = (TreeSet<String>) varTag.getType().getTypes();
+        Set<String> types = varTag.getType().getTypes();
 
         return types.contains("\\Doctrine\\Common\\Collections\\Collection");
     }
