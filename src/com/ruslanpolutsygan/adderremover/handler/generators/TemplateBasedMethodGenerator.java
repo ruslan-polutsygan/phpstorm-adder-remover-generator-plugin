@@ -60,6 +60,7 @@ public abstract class TemplateBasedMethodGenerator extends MethodGenerator {
         attributes.setProperty("IS_DOCTRINE_COLLECTION", this.isDoctrineCollectionField(field)?"doctrine":"");
         attributes.setProperty("FIELD_NAME", field.getName());
         attributes.setProperty("PARAM_NAME", Util.createParamName(field.getName()));
+        attributes.setProperty("THIS_CLASS_NAME", field.getContainingClass().getName());
 
         return attributes;
     }

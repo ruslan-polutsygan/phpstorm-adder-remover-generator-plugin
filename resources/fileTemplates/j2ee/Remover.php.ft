@@ -5,6 +5,8 @@ public function ${METHOD_NAME}(${TYPE_HINTED_PARAM})
 {
 #if (${IS_DOCTRINE_COLLECTION} == "doctrine")
     $this->${FIELD_NAME}->removeElement(${PARAM_NAME});
+    // uncomment if you want to update other side
+    //${PARAM_NAME}->set${THIS_CLASS_NAME}(null);
 #else
     if ($key = array_search(${PARAM_NAME}, $this->${FIELD_NAME}, true) !== false) {
         array_splice($this->${FIELD_NAME}, $key, 1);
