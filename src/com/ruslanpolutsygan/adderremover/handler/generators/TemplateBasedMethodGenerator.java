@@ -54,7 +54,8 @@ public abstract class TemplateBasedMethodGenerator extends MethodGenerator {
     private Properties getMethodAttributes(Field field) {
         Properties attributes = new Properties();
 
-        attributes.setProperty("TYPE_HINT", this.getTypeHint(field));
+        attributes.setProperty("TYPE_HINT", this.getTypeHint(field, false));
+        attributes.setProperty("TYPE_HINT_FQCN", this.getTypeHint(field, true));
         attributes.setProperty("METHOD_NAME", this.getMethodName(field));
         attributes.setProperty("TYPE_HINTED_PARAM", this.getMethodArgument(field));
         attributes.setProperty("IS_DOCTRINE_COLLECTION", this.isDoctrineCollectionField(field)?"doctrine":"");
@@ -65,7 +66,7 @@ public abstract class TemplateBasedMethodGenerator extends MethodGenerator {
         return attributes;
     }
 
-    private String getTypeHint(Field field) {
+    private String getTypeHint(Field field, boolean isFQCN) {
         PhpDocComment phpDoc = field.getDocComment();
         if(phpDoc == null) {
             return "mixed";
@@ -79,7 +80,12 @@ public abstract class TemplateBasedMethodGenerator extends MethodGenerator {
         Set<String> types = varTag.getType().getTypes();
         for (String type : types) {
             if (type.endsWith("[]")) {
-                return (type.substring(0, type.length() - 2));
+                int beginIndex = 0;
+                if(!isFQCN) {
+                    beginIndex = type.lastIndexOf('\\') + 1;
+                }
+
+                return type.substring(beginIndex, type.length() - 2);
             }
         }
 

@@ -32,7 +32,14 @@
         <td valign="top"><nobr><font face="verdana" size="-2"><b>${TYPE_HINT}</b></font></nobr></td>
         <td width="10">&nbsp;</td>
         <td width="100%" valign="top"><font face="verdana" size="-1">Type hint of param used in doc-comment, based on field name type hint.
-            For example, if field is typehinted with `App\User[]`, then ${TYPE_HINT} is `App\User`, if field is of type `array` - `mixed`. FQCN used.</font></td>
+            For example, if field is typehinted with `App\User[]`, then ${TYPE_HINT} is `User`, if field is of type `array` - `mixed`.</font>
+        </td>
+    </tr>
+    <tr>
+        <td valign="top"><nobr><font face="verdana" size="-2"><b>${TYPE_HINT_FQCN}</b></font></nobr></td>
+        <td width="10">&nbsp;</td>
+        <td width="100%" valign="top"><font face="verdana" size="-1">FQCN version of ${TYPE_HINT}: `App\User[]` => `App\User`</font>
+        </td>
     </tr>
     <tr>
         <td valign="top"><nobr><font face="verdana" size="-2"><b>${TYPE_HINTED_PARAM}</b></font></nobr></td>
