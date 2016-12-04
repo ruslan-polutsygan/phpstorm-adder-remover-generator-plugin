@@ -12,15 +12,13 @@ import com.jetbrains.php.lang.documentation.phpdoc.psi.PhpDocComment;
 import com.jetbrains.php.lang.documentation.phpdoc.psi.tags.PhpDocParamTag;
 import com.jetbrains.php.lang.intentions.generators.PhpAccessorMethodData;
 import com.jetbrains.php.lang.psi.PhpCodeEditUtil;
-import com.jetbrains.php.lang.psi.PhpFile;
 import com.jetbrains.php.lang.psi.elements.Field;
 import com.jetbrains.php.lang.psi.elements.PhpClass;
 import com.ruslanpolutsygan.adderremover.handler.checkers.MethodChecker;
 import com.ruslanpolutsygan.adderremover.handler.generators.MethodGenerator;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.Set;
+import java.util.*;
 
 public class ActionHandler extends PhpGenerateFieldAccessorHandlerBase {
 
@@ -38,8 +36,8 @@ public class ActionHandler extends PhpGenerateFieldAccessorHandlerBase {
             return;
         }
 
-        PhpNamedElementNode[] fields = this.collectFields(editor, (PhpFile)file);
-        if(fields == null || fields.length == 0) {
+        PhpNamedElementNode[] fields = this.collectFields(phpClass);
+        if(fields.length == 0) {
             if(!ApplicationManager.getApplication().isHeadlessEnvironment()) {
                 HintManager.getInstance().showErrorHint(editor, this.getErrorMessage());
             }
@@ -108,6 +106,21 @@ public class ActionHandler extends PhpGenerateFieldAccessorHandlerBase {
         }
 
         return false;
+    }
+
+    @NotNull
+    protected PhpNamedElementNode[] collectFields(@NotNull PhpClass phpClass) {
+        TreeMap<String, PhpNamedElementNode> nodes = new TreeMap<>();
+        Collection fields = phpClass.getFields();
+
+        for (Object field1 : fields) {
+            Field field = (Field) field1;
+            if (!field.isConstant() && this.isSelectable(phpClass, field)) {
+                nodes.put(field.getName(), new PhpNamedElementNode(field));
+            }
+        }
+
+        return nodes.values().toArray(new PhpNamedElementNode[nodes.size()]);
     }
 
     @Override
