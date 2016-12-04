@@ -8,7 +8,7 @@ It is possible to generate only adders, only removers or both at the same time: 
 ![context menu](https://i.imgur.com/ExPnHNN.png)
 
 
-*__Works in PhpStorm 9, 10, 2016.1, 2016.2.__*
+*__Works in PhpStorm 9, 10, 2016.1, 2016.2, 2016.3.__*
 
 ## Examples
 
