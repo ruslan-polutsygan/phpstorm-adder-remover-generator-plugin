@@ -4,14 +4,21 @@ import com.intellij.codeInsight.hint.HintManager;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
+import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
+import com.intellij.psi.codeStyle.CodeStyleManager;
+import com.intellij.psi.tree.IElementType;
 import com.jetbrains.php.lang.actions.PhpNamedElementNode;
 import com.jetbrains.php.lang.actions.generation.PhpGenerateFieldAccessorHandlerBase;
 import com.jetbrains.php.lang.documentation.phpdoc.psi.PhpDocComment;
 import com.jetbrains.php.lang.documentation.phpdoc.psi.tags.PhpDocParamTag;
 import com.jetbrains.php.lang.intentions.generators.PhpAccessorMethodData;
+import com.jetbrains.php.lang.lexer.PhpTokenTypes;
+import com.jetbrains.php.lang.parser.PhpElementTypes;
+import com.jetbrains.php.lang.parser.PhpStubElementTypes;
 import com.jetbrains.php.lang.psi.PhpCodeEditUtil;
+import com.jetbrains.php.lang.psi.PhpFile;
 import com.jetbrains.php.lang.psi.elements.Field;
 import com.jetbrains.php.lang.psi.elements.PhpClass;
 import com.ruslanpolutsygan.adderremover.handler.checkers.MethodChecker;
@@ -59,14 +66,28 @@ public class ActionHandler extends PhpGenerateFieldAccessorHandlerBase {
             }
         }
 
+        StringBuffer buffer = new StringBuffer();
+        int startOffset = ActionHandler.getSuitableEditorPosition(editor, (PhpFile)file);
+//        int startOffset = editor.getCaretModel().getOffset();
+
         for(Field field : selectedFields) {
             for(PhpMethodData methodData : this.generator.generate(field)) {
-                PsiElement element = PhpCodeEditUtil.insertClassMemberWithPhpDoc(
-                        phpClass, methodData.getMethod(), methodData.getPhpDoc()
-                );
-                editor.getCaretModel().moveToOffset(element.getTextOffset());
+//                PsiElement element = PhpCodeEditUtil.insertClassMemberWithPhpDoc(
+//                        phpClass, methodData.getMethod(), methodData.getPhpDoc()
+//                );
+//                editor.getCaretModel().moveToOffset(element.getTextOffset());
+                buffer.append(methodData.getPhpDoc().getText());
+                buffer.append('\n');
+
+                buffer.append(methodData.getMethod().getText());
+                buffer.append('\n');
             }
         }
+
+        editor.getDocument().insertString(startOffset, buffer);
+        int endOffset = editor.getCaretModel().getOffset() + buffer.length();
+        CodeStyleManager.getInstance(project).reformatText(file, startOffset, endOffset);
+        PsiDocumentManager.getInstance(project).commitDocument(editor.getDocument());
     }
 
     @Override
@@ -135,5 +156,52 @@ public class ActionHandler extends PhpGenerateFieldAccessorHandlerBase {
 
     public boolean startInWriteAction() {
         return true;
+    }
+
+    private static int getSuitableEditorPosition(Editor editor, PhpFile phpFile) {
+        PsiElement currElement = phpFile.findElementAt(editor.getCaretModel().getOffset());
+        if(currElement != null) {
+            PsiElement parent = currElement.getParent();
+
+            for(PsiElement prevParent = currElement; parent != null && !(parent instanceof PhpFile); parent = parent.getParent()) {
+                if(isClassMember(parent)) {
+                    return getNextPos(parent);
+                }
+
+                if(parent instanceof PhpClass) {
+                    while(prevParent != null) {
+                        if(isClassMember(prevParent) || prevParent.getNode().getElementType() == PhpTokenTypes.chLBRACE) {
+                            return getNextPos(prevParent);
+                        }
+
+                        prevParent = prevParent.getPrevSibling();
+                    }
+
+                    for(PsiElement classChild = parent.getFirstChild(); classChild != null; classChild = classChild.getNextSibling()) {
+                        if(classChild.getNode().getElementType() == PhpTokenTypes.chLBRACE) {
+                            return getNextPos(classChild);
+                        }
+                    }
+                }
+
+                prevParent = parent;
+            }
+        }
+
+        return -1;
+    }
+
+    private static boolean isClassMember(PsiElement element) {
+        if(element == null) {
+            return false;
+        } else {
+            IElementType elementType = element.getNode().getElementType();
+            return elementType == PhpElementTypes.CLASS_FIELDS || elementType == PhpElementTypes.CLASS_CONSTANTS || elementType == PhpStubElementTypes.CLASS_METHOD;
+        }
+    }
+
+    private static int getNextPos(PsiElement element) {
+        PsiElement next = element.getNextSibling();
+        return next != null?next.getTextOffset():-1;
     }
 }
