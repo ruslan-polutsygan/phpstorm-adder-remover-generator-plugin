@@ -1,14 +1,21 @@
 # Adders / Removers generator
 
 This plugin allows to generate adders and removers methods for class properties based on annotated type.
-Recognized types are: `array`, `ClassName[]`, `Doctrine\Common\Collections\Collection`.
+
+Recognized types are: 
+
+* `array` 
+* `ClassName[]` 
+* `Doctrine\Common\Collections\Collection`
+
+   **Note:** Any specific collection implementation is also supported, e.g. `Doctrine\Common\Collections\ArrayCollection`.
 
 It is possible to generate only adders, only removers or both at the same time: plugin adds three menu items to class "Generate" context menu
 
 ![context menu](https://i.imgur.com/ExPnHNN.png)
 
 
-*__Works in PhpStorm 9, 10, 2016.1, 2016.2, 2016.3.__*
+*__Works in PhpStorm 9, 10, 2016.1, 2016.2, 2016.3, 2017.1.__*
 
 ## Examples
 
@@ -109,11 +116,12 @@ class Entity
 namespace App\Entity;
 
 use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 
 class Entity
 {
     /**
-     * @var User[]|Collection
+     * @var User[]|Collection // or ArrayCollection
      */
     protected $users;
 }
@@ -125,11 +133,12 @@ class Entity
 namespace App\Entity;
 
 use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 
 class Entity
 {
     /**
-     * @var User[]|Collection
+     * @var User[]|Collection // or ArrayCollection
      */
     protected $users;
 
