@@ -68,14 +68,9 @@ public class ActionHandler extends PhpGenerateFieldAccessorHandlerBase {
 
         StringBuffer buffer = new StringBuffer();
         int startOffset = ActionHandler.getSuitableEditorPosition(editor, (PhpFile)file);
-//        int startOffset = editor.getCaretModel().getOffset();
 
         for(Field field : selectedFields) {
             for(PhpMethodData methodData : this.generator.generate(field)) {
-//                PsiElement element = PhpCodeEditUtil.insertClassMemberWithPhpDoc(
-//                        phpClass, methodData.getMethod(), methodData.getPhpDoc()
-//                );
-//                editor.getCaretModel().moveToOffset(element.getTextOffset());
                 buffer.append(methodData.getPhpDoc().getText());
                 buffer.append('\n');
 
@@ -85,7 +80,7 @@ public class ActionHandler extends PhpGenerateFieldAccessorHandlerBase {
         }
 
         editor.getDocument().insertString(startOffset, buffer);
-        int endOffset = editor.getCaretModel().getOffset() + buffer.length();
+        int endOffset = startOffset + buffer.length();
         CodeStyleManager.getInstance(project).reformatText(file, startOffset, endOffset);
         PsiDocumentManager.getInstance(project).commitDocument(editor.getDocument());
     }
@@ -158,6 +153,7 @@ public class ActionHandler extends PhpGenerateFieldAccessorHandlerBase {
         return true;
     }
 
+    /** copy-paste from com.jetbrains.php.lang.actions.generation.PhpGenerateFieldAccessorHandlerBase */
     private static int getSuitableEditorPosition(Editor editor, PhpFile phpFile) {
         PsiElement currElement = phpFile.findElementAt(editor.getCaretModel().getOffset());
         if(currElement != null) {
