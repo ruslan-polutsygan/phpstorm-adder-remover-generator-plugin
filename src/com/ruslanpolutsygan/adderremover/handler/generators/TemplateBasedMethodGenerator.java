@@ -2,7 +2,9 @@ package com.ruslanpolutsygan.adderremover.handler.generators;
 
 import com.intellij.ide.fileTemplates.FileTemplate;
 import com.intellij.ide.fileTemplates.FileTemplateManager;
+import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
+import com.jetbrains.php.PhpIndex;
 import com.jetbrains.php.lang.PhpCodeUtil;
 import com.jetbrains.php.lang.documentation.phpdoc.psi.PhpDocComment;
 import com.jetbrains.php.lang.documentation.phpdoc.psi.tags.PhpDocParamTag;
@@ -126,7 +128,26 @@ public abstract class TemplateBasedMethodGenerator extends MethodGenerator {
         }
 
         Set<String> types = varTag.getType().getTypes();
+        Set<String> doctrineClassNames = this.getDoctrineCollectionClassNames(field.getProject());
 
-        return types.contains("\\Doctrine\\Common\\Collections\\Collection");
+        types.retainAll(doctrineClassNames);
+
+        return types.size()>0;
+    }
+
+    private Set<String> getDoctrineCollectionClassNames(Project project) {
+        String doctrineCollectionInterfaceFQN = "\\Doctrine\\Common\\Collections\\Collection";
+
+        PhpIndex index = PhpIndex.getInstance(project);
+        Collection<PhpClass> doctrineCollectionClasses = index.getAllSubclasses(doctrineCollectionInterfaceFQN);
+
+        Set<String> classNames = new HashSet<>();
+
+        for(PhpClass c: doctrineCollectionClasses) {
+            classNames.add("\\" + c.getPresentableFQN());
+        }
+        classNames.add(doctrineCollectionInterfaceFQN);
+
+        return classNames;
     }
 }
