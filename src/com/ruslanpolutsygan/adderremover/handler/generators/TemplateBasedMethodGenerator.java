@@ -2,9 +2,7 @@ package com.ruslanpolutsygan.adderremover.handler.generators;
 
 import com.intellij.ide.fileTemplates.FileTemplate;
 import com.intellij.ide.fileTemplates.FileTemplateManager;
-import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
-import com.jetbrains.php.PhpIndex;
 import com.jetbrains.php.lang.PhpCodeUtil;
 import com.jetbrains.php.lang.documentation.phpdoc.psi.PhpDocComment;
 import com.jetbrains.php.lang.documentation.phpdoc.psi.tags.PhpDocParamTag;
@@ -60,10 +58,14 @@ public abstract class TemplateBasedMethodGenerator extends MethodGenerator {
         attributes.setProperty("TYPE_HINT_FQCN", this.getTypeHint(field, true));
         attributes.setProperty("METHOD_NAME", this.getMethodName(field));
         attributes.setProperty("TYPE_HINTED_PARAM", this.getMethodArgument(field));
-        attributes.setProperty("IS_DOCTRINE_COLLECTION", this.isDoctrineCollectionField(field)?"doctrine":"");
+        attributes.setProperty("IS_DOCTRINE_COLLECTION", Util.isDoctrineCollectionField(field)?"doctrine":"");
         attributes.setProperty("FIELD_NAME", field.getName());
         attributes.setProperty("PARAM_NAME", Util.createParamName(field.getName()));
-        attributes.setProperty("THIS_CLASS_NAME", field.getContainingClass().getName());
+
+        PhpClass containingClass = field.getContainingClass();
+        if(containingClass != null) {
+            attributes.setProperty("THIS_CLASS_NAME", containingClass.getName());
+        }
 
         return attributes;
     }
@@ -114,40 +116,5 @@ public abstract class TemplateBasedMethodGenerator extends MethodGenerator {
         }
 
         return paramName;
-    }
-
-    private boolean isDoctrineCollectionField(Field field) {
-        PhpDocComment phpDoc = field.getDocComment();
-        if(phpDoc == null) {
-            return false;
-        }
-
-        PhpDocParamTag varTag = phpDoc.getVarTag();
-        if(varTag == null) {
-            return false;
-        }
-
-        Set<String> types = varTag.getType().getTypes();
-        Set<String> doctrineClassNames = this.getDoctrineCollectionClassNames(field.getProject());
-
-        types.retainAll(doctrineClassNames);
-
-        return types.size()>0;
-    }
-
-    private Set<String> getDoctrineCollectionClassNames(Project project) {
-        String doctrineCollectionInterfaceFQN = "\\Doctrine\\Common\\Collections\\Collection";
-
-        PhpIndex index = PhpIndex.getInstance(project);
-        Collection<PhpClass> doctrineCollectionClasses = index.getAllSubclasses(doctrineCollectionInterfaceFQN);
-
-        Set<String> classNames = new HashSet<>();
-
-        for(PhpClass c: doctrineCollectionClasses) {
-            classNames.add("\\" + c.getPresentableFQN());
-        }
-        classNames.add(doctrineCollectionInterfaceFQN);
-
-        return classNames;
     }
 }

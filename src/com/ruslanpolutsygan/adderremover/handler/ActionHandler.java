@@ -11,8 +11,6 @@ import com.intellij.psi.codeStyle.CodeStyleManager;
 import com.intellij.psi.tree.IElementType;
 import com.jetbrains.php.lang.actions.PhpNamedElementNode;
 import com.jetbrains.php.lang.actions.generation.PhpGenerateFieldAccessorHandlerBase;
-import com.jetbrains.php.lang.documentation.phpdoc.psi.PhpDocComment;
-import com.jetbrains.php.lang.documentation.phpdoc.psi.tags.PhpDocParamTag;
 import com.jetbrains.php.lang.intentions.generators.PhpAccessorMethodData;
 import com.jetbrains.php.lang.lexer.PhpTokenTypes;
 import com.jetbrains.php.lang.parser.PhpElementTypes;
@@ -21,6 +19,7 @@ import com.jetbrains.php.lang.psi.PhpCodeEditUtil;
 import com.jetbrains.php.lang.psi.PhpFile;
 import com.jetbrains.php.lang.psi.elements.Field;
 import com.jetbrains.php.lang.psi.elements.PhpClass;
+import com.ruslanpolutsygan.adderremover.Util;
 import com.ruslanpolutsygan.adderremover.handler.checkers.MethodChecker;
 import com.ruslanpolutsygan.adderremover.handler.generators.MethodGenerator;
 import org.jetbrains.annotations.NotNull;
@@ -92,36 +91,7 @@ public class ActionHandler extends PhpGenerateFieldAccessorHandlerBase {
 
     @Override
     protected boolean isSelectable(PhpClass phpClass, Field field) {
-        return !this.checker.hasMethod(field) && this.hasArrayLikeAnnotation(field);
-    }
-
-    private boolean hasArrayLikeAnnotation(Field field) {
-        PhpDocComment phpDoc = field.getDocComment();
-        if(phpDoc == null) {
-            return false;
-        }
-
-        PhpDocParamTag varTag = phpDoc.getVarTag();
-        if(varTag == null) {
-            return false;
-        }
-
-        Set<String> types = varTag.getType().getTypes();
-        for (String type : types) {
-            if (type.endsWith("[]")) {
-                return true;
-            }
-
-            if(type.equals("\\array")) {
-                return true;
-            }
-
-            if(type.equals("\\Doctrine\\Common\\Collections\\Collection")) {
-                return true;
-            }
-        }
-
-        return false;
+        return !this.checker.hasMethod(field) && Util.isArrayLikeField(field);
     }
 
     @NotNull
