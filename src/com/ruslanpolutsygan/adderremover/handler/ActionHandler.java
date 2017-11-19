@@ -70,11 +70,14 @@ public class ActionHandler extends PhpGenerateFieldAccessorHandlerBase {
 
         for(Field field : selectedFields) {
             for(PhpMethodData methodData : this.generator.generate(field)) {
-                buffer.append(methodData.getPhpDoc().getText());
-                buffer.append('\n');
-
-                buffer.append(methodData.getMethod().getText());
-                buffer.append('\n');
+                if(methodData.getPhpDoc() != null) {
+                    buffer.append(methodData.getPhpDoc().getText());
+                    buffer.append('\n');
+                }
+                if(methodData.getMethod() != null) {
+                    buffer.append(methodData.getMethod().getText());
+                    buffer.append('\n');
+                }
             }
         }
 
