@@ -8,7 +8,7 @@ public function ${METHOD_NAME}(${TYPE_HINTED_PARAM})
     // uncomment if you want to update other side
     //${PARAM_NAME}->set${THIS_CLASS_NAME}(null);
 #else
-    if ($key = array_search(${PARAM_NAME}, $this->${FIELD_NAME}, true) !== false) {
+    if (false !== $key = array_search(${PARAM_NAME}, $this->${FIELD_NAME}, true)) {
         array_splice($this->${FIELD_NAME}, $key, 1);
     }
 #end
