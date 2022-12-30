@@ -8,21 +8,30 @@
     <name>Adder-Remover</name>
 
     <!-- A displayed Vendor name or Organization ID displayed on the Plugins Page. -->
-    <vendor email="johndaligault@gmail.com" url="https://www.yourcompany.com">Nothing</vendor>
+    <vendor email="johndaligault@gmail.com" url="mailto:johndaligault@gmail.com">John D.</vendor>
 
     <!-- Description of the plugin displayed on the Plugin Page and IDE Plugin Manager.
          Simple HTML elements (text formatting, paragraphs, and lists) can be added inside of <![CDATA[ ]]> tag.
          Guidelines: https://plugins.jetbrains.com/docs/marketplace/plugin-overview-page.html#plugin-description -->
-    <description>Generates adders/removers for class properties</description>
+    <description><![CDATA[
+    <h1>Adders/Removers Generator</h1>
+
+    <p>Now compatible with <i>PHP Typed Property (7.4)</i> and <i>PHP Attribute (8.0)</i>.</p>
+    <p>Check <i>Doctrine Mapping Attribute</i> to guess Collection items Type (when <i>PhpDoc @var</i> is not defined).</p>
+
+    <br><br><br>
+
+    <h5>Based on "Adders/Removers Generator" by "Ruslan Polutsygan"</h5>
+    ]]></description>
 
     <change-notes><![CDATA[
-<h2>1.0</h2>
+<h2>1.0.0</h2>
 <ul>
-    <li>[enhancement] New default template for fluent adder and remover</li>
-    <li>[enhancement] Now using PhpDoc first or fallback to PhpTyping</li>
+    <li>[enhancement] New default template for adder and remover (fluent)</li>
+    <li>[enhancement] No need for PhpDoc @var is variable is Typed using Php Typing (PHP: 7.4)</li>
+    <li>[enhancement] Checking for Doctrine Mapping Attribute to guess Collection Item.Type (PHP: 8.0)</li>
 </ul>
-      ]]>
-    </change-notes>
+      ]]></change-notes>
 
     <!-- Product and plugin compatibility requirements.
          Read more: https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html -->

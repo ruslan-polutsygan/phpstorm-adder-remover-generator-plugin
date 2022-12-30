@@ -15,7 +15,7 @@ It is possible to generate only adders, only removers or both at the same time: 
 ![context menu](https://i.imgur.com/ExPnHNN.png)
 
 
-*__Works in PhpStorm 9, 10, 2016.1, 2016.2, 2016.3, 2017.1, 2017.2__*
+*__Works in PhpStorm 2022.2__*
 
 ## Examples
 
@@ -44,22 +44,18 @@ class Entity
      */
     protected $users;
 
-    /**
-     * @param mixed $user
-     */
-    public function addUser($user)
+    public function addUser(mixed $user): self
     {
         $this->users[] = $user;
+        return $this;
     }
 
-    /**
-     * @param mixed $user
-     */
-    public function removeUser($user)
+    public function removeUser(mixed $user): self
     {
         if ($key = array_search($user, $this->users, true) !== false) {
             array_splice($this->users, $key, 1);
         }
+        return $this;
     }
 }
 ```
@@ -90,22 +86,18 @@ class Entity
      */
     protected $users;
 
-    /**
-     * @param \App\Entity\User $user
-     */
-    public function addUser(User $user)
+    public function addUser(User $user): self
     {
         $this->users[] = $user;
+        return $this;
     }
 
-    /**
-     * @param \App\Entity\User $user
-     */
-    public function removeUser(User $user)
+    public function removeUser(User $user): self
     {
         if ($key = array_search($user, $this->users, true) !== false) {
             array_splice($this->users, $key, 1);
         }
+        return $this;
     }
 }
 ```
@@ -142,24 +134,115 @@ class Entity
      */
     protected $users;
 
-    /**
-     * @param \App\Entity\User $user
-     */
-    public function addUser(User $user)
+    public function addUser(User $user): self
     {
         $this->users->add($user);
+        return $this;
     }
 
-    /**
-     * @param \App\Entity\User $user
-     */
-    public function removeUser(User $user)
+    public function removeUser(User $user): self
     {
         $this->users->removeElement($user);
+        return $this;
     }
 }
 ```
+---
+### Before
 
+```php
+namespace App\Entity;
+
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+
+class Entity
+{
+    protected Collection $users;
+}
+```
+
+### After
+
+```php
+namespace App\Entity;
+
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\Mapping as ORM;
+
+class Entity
+{
+    protected Collection $users;
+
+    public function addUser(mixed $user): self
+    {
+        $this->users->add($user);
+        return $this;
+    }
+
+    public function removeUser(mixed $user): self
+    {
+        $this->users->removeElement($user);
+        return $this;
+    }
+}
+```
+---
+### Before
+
+```php
+namespace App\Entity;
+
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\Mapping as ORM;
+
+class Entity
+{
+    #[ORM\OneToMany(
+        mappedBy: 'user',
+        targetEntity: Message::class,
+        cascade: ['remove'],
+        fetch: 'EXTRA_LAZY'
+    )]
+    protected Collection $users;
+}
+```
+
+### After
+
+```php
+namespace App\Entity;
+
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\Mapping as ORM;
+
+class Entity
+{
+    #[ORM\OneToMany(
+        mappedBy: 'user',
+        targetEntity: Message::class,
+        cascade: ['remove'],
+        fetch: 'EXTRA_LAZY'
+    )]
+    protected Collection $users;
+
+    public function addUser(User $user): self
+    {
+        $this->users->add($user);
+        return $this;
+    }
+
+    public function removeUser(User $user): self
+    {
+        $this->users->removeElement($user);
+        return $this;
+    }
+}
+```
+---
 ## Edit templates
 To edit templates used for generating methods go to:
 `Settings` -> `Editor` -> `File and Code Templates` -> `Other` -> `Adder/Remover`

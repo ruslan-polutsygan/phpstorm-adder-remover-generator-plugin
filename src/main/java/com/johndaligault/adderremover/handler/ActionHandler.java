@@ -17,6 +17,7 @@ import com.jetbrains.php.lang.parser.PhpElementTypes;
 import com.jetbrains.php.lang.parser.PhpStubElementTypes;
 import com.jetbrains.php.lang.psi.PhpCodeEditUtil;
 import com.jetbrains.php.lang.psi.PhpFile;
+import com.jetbrains.php.lang.psi.PhpPsiUtil;
 import com.jetbrains.php.lang.psi.elements.Field;
 import com.jetbrains.php.lang.psi.elements.PhpClass;
 import com.johndaligault.adderremover.Util;
@@ -36,6 +37,7 @@ public class ActionHandler extends PhpGenerateFieldAccessorHandlerBase {
         this.checker = checker;
     }
 
+    @Override
     public void invoke(@NotNull Project project, @NotNull Editor editor, @NotNull PsiFile file) {
         PhpClass phpClass = PhpCodeEditUtil.findClassAtCaret(editor, file);
         if(phpClass == null) {
@@ -92,10 +94,6 @@ public class ActionHandler extends PhpGenerateFieldAccessorHandlerBase {
         return new PhpAccessorMethodData[0];
     }
 
-    protected PhpAccessorMethodData[] createAccessors(PsiElement psiElement) {
-        return new PhpAccessorMethodData[0];
-    }
-
     @Override
     protected boolean isSelectable(PhpClass phpClass, Field field) {
         return !this.checker.hasMethod(field) && Util.isArrayLikeField(field);
@@ -133,17 +131,17 @@ public class ActionHandler extends PhpGenerateFieldAccessorHandlerBase {
     /** copy-paste from com.jetbrains.php.lang.actions.generation.PhpGenerateFieldAccessorHandlerBase */
     private static int getSuitableEditorPosition(Editor editor, PhpFile phpFile) {
         PsiElement currElement = phpFile.findElementAt(editor.getCaretModel().getOffset());
-        if(currElement != null) {
+        if (currElement != null) {
             PsiElement parent = currElement.getParent();
 
             for(PsiElement prevParent = currElement; parent != null && !(parent instanceof PhpFile); parent = parent.getParent()) {
-                if(isClassMember(parent)) {
+                if (isClassMember(parent)) {
                     return getNextPos(parent);
                 }
 
-                if(parent instanceof PhpClass) {
+                if (parent instanceof PhpClass) {
                     while(prevParent != null) {
-                        if(isClassMember(prevParent) || prevParent.getNode().getElementType() == PhpTokenTypes.chLBRACE) {
+                        if (isClassMember(prevParent) || PhpPsiUtil.isOfType(prevParent, PhpTokenTypes.chLBRACE)) {
                             return getNextPos(prevParent);
                         }
 
@@ -151,7 +149,7 @@ public class ActionHandler extends PhpGenerateFieldAccessorHandlerBase {
                     }
 
                     for(PsiElement classChild = parent.getFirstChild(); classChild != null; classChild = classChild.getNextSibling()) {
-                        if(classChild.getNode().getElementType() == PhpTokenTypes.chLBRACE) {
+                        if (PhpPsiUtil.isOfType(classChild, PhpTokenTypes.chLBRACE)) {
                             return getNextPos(classChild);
                         }
                     }
