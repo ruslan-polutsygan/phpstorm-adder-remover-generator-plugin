@@ -51,7 +51,7 @@ public abstract class TemplateBasedMethodGenerator extends MethodGenerator {
             }
         }
 
-        return methodsData.toArray(new PhpMethodData[methodsData.size()]);
+        return methodsData.toArray(new PhpMethodData[0]);
     }
 
     private Properties getMethodAttributes(Field field) {

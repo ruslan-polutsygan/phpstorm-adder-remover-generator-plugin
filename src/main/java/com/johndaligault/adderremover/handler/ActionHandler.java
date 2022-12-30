@@ -2,6 +2,7 @@ package com.johndaligault.adderremover.handler;
 
 import com.intellij.codeInsight.hint.HintManager;
 import com.intellij.openapi.application.ApplicationManager;
+import com.intellij.openapi.command.WriteCommandAction;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiDocumentManager;
@@ -12,6 +13,7 @@ import com.intellij.psi.tree.IElementType;
 import com.jetbrains.php.lang.actions.PhpNamedElementNode;
 import com.jetbrains.php.lang.actions.generation.PhpGenerateFieldAccessorHandlerBase;
 import com.jetbrains.php.lang.intentions.generators.PhpAccessorMethodData;
+import com.jetbrains.php.lang.intentions.generators.PhpAccessorsGenerator;
 import com.jetbrains.php.lang.lexer.PhpTokenTypes;
 import com.jetbrains.php.lang.parser.PhpElementTypes;
 import com.jetbrains.php.lang.parser.PhpStubElementTypes;
@@ -83,10 +85,14 @@ public class ActionHandler extends PhpGenerateFieldAccessorHandlerBase {
             }
         }
 
-        editor.getDocument().insertString(startOffset, buffer);
-        int endOffset = startOffset + buffer.length();
-        CodeStyleManager.getInstance(project).reformatText(file, startOffset, endOffset);
-        PsiDocumentManager.getInstance(project).commitDocument(editor.getDocument());
+        Runnable r = ()-> {
+            editor.getDocument().insertString(startOffset, buffer);
+            int endOffset = startOffset + buffer.length();
+            CodeStyleManager.getInstance(project).reformatText(file, startOffset, endOffset);
+            PsiDocumentManager.getInstance(project).commitDocument(editor.getDocument());
+        };
+
+        WriteCommandAction.runWriteCommandAction(project, r);
     }
 
     @Override
@@ -110,7 +116,7 @@ public class ActionHandler extends PhpGenerateFieldAccessorHandlerBase {
             }
         }
 
-        return nodes.values().toArray(new PhpNamedElementNode[nodes.size()]);
+        return nodes.values().toArray(new PhpNamedElementNode[0]);
     }
 
     @Override
@@ -125,7 +131,7 @@ public class ActionHandler extends PhpGenerateFieldAccessorHandlerBase {
 
     @Override
     public boolean startInWriteAction() {
-        return true;
+        return false;
     }
 
     /** copy-paste from com.jetbrains.php.lang.actions.generation.PhpGenerateFieldAccessorHandlerBase */
