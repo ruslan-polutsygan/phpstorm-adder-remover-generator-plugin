@@ -74,13 +74,17 @@ public abstract class TemplateBasedMethodGenerator extends MethodGenerator {
     }
 
     private String getTypeHint(Field field, boolean isFQCN) {
+        // check PhpDoc existence First
         PhpDocComment phpDoc = field.getDocComment();
         if(phpDoc == null) {
-            return "mixed";
+            // Fallback to guess typing form Doctrine Attribute
+            return guessTypeHintFormDoctrineAttribute(field);
         }
 
+        // check PhpDoc @var First
         PhpDocParamTag varTag = phpDoc.getVarTag();
         if(varTag == null) {
+            // Fallback to guess typing form Doctrine PhpDoc
             return "mixed";
         }
 
@@ -93,6 +97,37 @@ public abstract class TemplateBasedMethodGenerator extends MethodGenerator {
                 }
 
                 return type.substring(beginIndex, type.length() - 2);
+            }
+        }
+
+        return "mixed";
+    }
+
+    private String guessTypeHintFormDoctrineAttribute(Field field) {
+        for (PhpAttribute attribute : field.getAttributes()) {
+            String attributeClass = attribute.getFQN();
+
+            if (attributeClass == null) {
+                continue;
+            }
+
+            List<String> doctrineAssociation = Arrays.asList(
+                    "\\Doctrine\\ORM\\Mapping\\OneToMany",
+                    "\\Doctrine\\ORM\\Mapping\\ManyToMany"
+            );
+
+            if (!doctrineAssociation.contains(attributeClass)) {
+                continue;
+            }
+
+            for (PhpAttribute.PhpAttributeArgument argument: attribute.getArguments()) {
+                if (Objects.equals(argument.getName(), "targetEntity")) {
+                    String entityClass = argument.getArgument().getValue();
+                    String suffix = ".class";
+
+                    int beginIndex = entityClass.lastIndexOf('\\') + 1;
+                    return entityClass.substring(beginIndex, entityClass.length() - suffix.length());
+                }
             }
         }
 
