@@ -32,21 +32,25 @@ public class Util {
     }
 
     public static boolean isArrayLikeField(Field field) {
+        // check PhpDoc existence First
         PhpDocComment phpDoc = field.getDocComment();
         if(phpDoc == null) {
-            return false;
+            // Fallback to field typing
+            return Util.isDoctrineCollectionField(field) || isTypedArrayLikeField(field.getDeclaredType());
         }
 
+        // check PhpDoc @var First
         PhpDocParamTag varTag = phpDoc.getVarTag();
         if(varTag == null) {
-            return false;
+            // Fallback to field typing
+            return Util.isDoctrineCollectionField(field) || isTypedArrayLikeField(field.getDeclaredType());
         }
 
-        if(Util.isDoctrineCollectionField(field)) {
-            return true;
-        }
+        return Util.isDoctrineCollectionField(field) || isTypedArrayLikeField(varTag.getType());
+    }
 
-        Set<String> types = varTag.getType().getTypes();
+    public static boolean isTypedArrayLikeField(PhpType typeField) {
+        Set<String> types = typeField.getTypes();
         for (String type : types) {
             if (type.endsWith("[]")) {
                 return true;
@@ -61,17 +65,21 @@ public class Util {
     }
 
     public static boolean isDoctrineCollectionField(Field field) {
+        // check PhpDoc existence First
         PhpDocComment phpDoc = field.getDocComment();
         if(phpDoc == null) {
-            return false;
+            // Fallback to field typing
+            return isTypedDoctrineCollectionField(field, field.getType());
         }
 
+        // check PhpDoc @var First
         PhpDocParamTag varTag = phpDoc.getVarTag();
-        if(varTag == null) {
-            return false;
-        }
+        return isTypedDoctrineCollectionField(field, Objects.requireNonNullElse(varTag, field).getType());
 
-        Set<String> types = varTag.getType().getTypes();
+    }
+
+    public static boolean isTypedDoctrineCollectionField(Field field, PhpType typeField) {
+        Set<String> types = typeField.getTypes();
         Set<String> doctrineClassNames = Util.getDoctrineCollectionClassNames(field.getProject());
 
         types.retainAll(doctrineClassNames);
