@@ -1,0 +1,49 @@
+<!-- Plugin Configuration File. Read more: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
+<idea-plugin>
+    <!-- Unique identifier of the plugin. It should be FQN. It cannot be changed between the plugin versions. -->
+    <id>com.johndaligault.adder-remover</id>
+
+    <!-- Public plugin name should be written in Title Case.
+         Guidelines: https://plugins.jetbrains.com/docs/marketplace/plugin-overview-page.html#plugin-name -->
+    <name>Adder-Remover</name>
+
+    <!-- A displayed Vendor name or Organization ID displayed on the Plugins Page. -->
+    <vendor email="johndaligault@gmail.com" url="https://www.yourcompany.com">Nothing</vendor>
+
+    <!-- Description of the plugin displayed on the Plugin Page and IDE Plugin Manager.
+         Simple HTML elements (text formatting, paragraphs, and lists) can be added inside of <![CDATA[ ]]> tag.
+         Guidelines: https://plugins.jetbrains.com/docs/marketplace/plugin-overview-page.html#plugin-description -->
+    <description>Generates adders/removers for class properties</description>
+
+    <change-notes><![CDATA[
+<h2>1.0</h2>
+<ul>
+    <li>[enhancement] New default template for fluent adder and remover</li>
+    <li>[enhancement] Now using PhpDoc first or fallback to PhpTyping</li>
+</ul>
+      ]]>
+    </change-notes>
+
+    <!-- Product and plugin compatibility requirements.
+         Read more: https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html -->
+    <depends>com.jetbrains.php</depends>
+    <depends>com.intellij.modules.platform</depends>
+
+    <actions>
+        <action id="Php.Generators.Adders" class="com.johndaligault.adderremover.actions.PhpGenerateAddersAction" text="Generate Adders">
+            <add-to-group group-id="GenerateGroup" anchor="last" />
+        </action>
+        <action id="Php.Generators.Removers" class="com.johndaligault.adderremover.actions.PhpGenerateRemoversAction" text="Generate Removers">
+            <add-to-group group-id="GenerateGroup" anchor="last" />
+        </action>
+        <action id="Php.Generators.AddersAndRemovers" class="com.johndaligault.adderremover.actions.PhpGenerateAddersAndRemoversAction" text="Generate Adders and Removers">
+            <add-to-group group-id="GenerateGroup" anchor="last" />
+        </action>
+    </actions>
+
+    <!-- Extension points defined by the plugin.
+         Read more: https://plugins.jetbrains.com/docs/intellij/plugin-extension-points.html -->
+    <extensions defaultExtensionNs="com.intellij">
+        <fileTemplateGroup implementation="com.johndaligault.adderremover.ft.AdderRemoverTemplateDescriptorFactory"/>
+    </extensions>
+</idea-plugin>
