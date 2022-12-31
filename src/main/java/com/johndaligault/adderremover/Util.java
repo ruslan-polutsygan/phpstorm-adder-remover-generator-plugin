@@ -88,17 +88,11 @@ public class Util {
     }
 
     private static Set<String> getDoctrineCollectionClassNames(Project project) {
-        String doctrineCollectionInterfaceFQN = "\\Doctrine\\Common\\Collections\\Collection";
-
-        PhpIndex index = PhpIndex.getInstance(project);
-        Collection<PhpClass> doctrineCollectionClasses = index.getAllSubclasses(doctrineCollectionInterfaceFQN);
-
         Set<String> classNames = new HashSet<>();
 
-        for(PhpClass c: doctrineCollectionClasses) {
-            classNames.add("\\" + c.getPresentableFQN());
-        }
-        classNames.add(doctrineCollectionInterfaceFQN);
+        classNames.add("\\Doctrine\\Common\\Collections\\Collection");
+        classNames.add("\\Doctrine\\Common\\Collections\\ArrayCollection");
+        classNames.add("\\Doctrine\\Common\\Collections\\AbstractLazyCollection");
 
         return classNames;
     }
