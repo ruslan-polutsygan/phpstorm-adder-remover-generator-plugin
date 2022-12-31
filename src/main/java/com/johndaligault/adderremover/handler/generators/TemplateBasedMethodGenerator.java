@@ -57,6 +57,7 @@ public abstract class TemplateBasedMethodGenerator extends MethodGenerator {
     private Properties getMethodAttributes(Field field) {
         Properties attributes = new Properties();
 
+        attributes.setProperty("ASSESSOR", field.getModifier().isStatic() ? "self::$" : "$this->");
         attributes.setProperty("TYPE_HINT", this.getTypeHint(field, false));
         attributes.setProperty("TYPE_HINT_FQCN", this.getTypeHint(field, true));
         attributes.setProperty("METHOD_NAME", this.getMethodName(field));

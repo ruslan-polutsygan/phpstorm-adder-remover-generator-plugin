@@ -16,6 +16,7 @@
     <description><![CDATA[
     <h1>Adders/Removers Generator</h1>
 
+    <p>Now compatible with <i>static fields</i>.</p>
     <p>Now compatible with <i>PHP Typed Property (7.4)</i> and <i>PHP Attribute (8.0)</i>.</p>
     <p>Check <i>Doctrine Mapping Attribute</i> to guess Collection items Type (when <i>PhpDoc @var</i> is not defined).</p>
 
@@ -25,6 +26,10 @@
     ]]></description>
 
     <change-notes><![CDATA[
+<h2>1.1.0</h2>
+<ul>
+    <li>[fix] Generation for static fields</li>
+</ul>
 <h2>1.0.0</h2>
 <ul>
     <li>[enhancement] New default template for adder and remover (fluent)</li>
